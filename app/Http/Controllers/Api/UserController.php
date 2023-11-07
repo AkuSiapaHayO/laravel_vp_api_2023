@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
@@ -19,8 +22,68 @@ class UserController extends Controller
         $check = [];
 
         foreach($users as $user){
-            array_push($check, Hash::check("Evan1234", $user->password));
+            array_push($check,
+            Hash::check("Evan1", $user->password));
         }
         return $check;
+    }
+
+    public function createUser(Request $request){
+        try{
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->phone = $request->phone;
+            $user->age = $request->age;
+            $user->save();
+            return[
+                'status' => Response::HTTP_OK,
+                'message' => "Success",
+                'data' => $user
+            ];
+        }catch(Exception $e){
+            return[
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
+    }
+
+    public function updateUser(Request $request){
+        if(!empty($request->email)){
+            $user = User::where('email', $request->email)->first();
+        }else{
+            $user = User::where('id', $request->id)->first();
+        }
+
+        if(!empty($user)){
+            try{
+                $user->name = $request->name;
+                $user->email = $request->email;
+                $user->password = Hash::make($request->password);
+                $user->phone = $request->phone;
+                $user->age = $request->age;
+                $user->save();
+                return[
+                    'status' => Response::HTTP_OK,
+                    'message' => "Success",
+                    'data' => $user
+                ];
+            }catch(Exception $e){
+                return[
+                    'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                    'message' => $e->getMessage(),
+                    'data' => []
+                ];
+            }
+        }
+
+        return[
+            'status' => Response::HTTP_NOT_FOUND,
+            'message' => "User not found",
+            'data' => []
+        ];
     }
 }
