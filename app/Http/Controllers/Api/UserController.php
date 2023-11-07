@@ -86,4 +86,28 @@ class UserController extends Controller
             'data' => []
         ];
     }
+
+    public function deleteUser(Request $request){
+        if(!empty($request->email)){
+            $user = User::where('email', $request->email)->first();
+        }else{
+            $user = User::where('id', $request->id)->first();
+        }
+
+        if(!empty($user)){
+            $user->delete();
+
+            return[
+                'status' => Response::HTTP_OK,
+                'message' => "Success",
+                'data' => []
+            ];
+        }
+
+        return[
+            'status' => Response::HTTP_NOT_FOUND,
+            'message' => "User not found",
+            'data' => []
+        ];
+    }
 }

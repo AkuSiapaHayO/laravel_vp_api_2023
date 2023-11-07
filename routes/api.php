@@ -23,3 +23,4 @@ Route::get('all_user', [UserController::class, 'getAllUser']);
 Route::get('check_password', [UserController::class, 'checkPassword']);
 Route::post('create_user', [UserController::class, 'createUser']);
 Route::patch('update_user', [UserController::class, 'updateUser']);
+Route::delete('delete_user', [UserController::class, 'deleteUser']);
