@@ -36,5 +36,6 @@ Route::middleware(['auth:sanctum'])->group(
         Route::post('favorit',[FavoriteController::class, 'CreateFavorit']);
         Route::delete('favorit',[FavoriteController::class, 'DeleteFavorit']);
         Route::delete('logout', [AuthenticationController::class, 'logout']);
+    
     }
 );

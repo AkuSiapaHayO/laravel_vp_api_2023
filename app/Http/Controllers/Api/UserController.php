@@ -52,12 +52,13 @@ class UserController extends Controller
     }
 
     public function updateUser(Request $request){
-        if(!empty($request->email)){
-            $user = User::where('email', $request->email)->first();
-        }else{
-            $user = User::where('id', $request->id)->first();
-        }
+        // if(!empty($request->email)){
+        //     $user = User::where('email', $request->email)->first();
+        // }else{
+        //     $user = User::where('id', $request->id)->first();
+        // }
 
+        $user = User::where('id', $request->id)->first();
         if(!empty($user)){
             try{
                 $user->name = $request->name;
